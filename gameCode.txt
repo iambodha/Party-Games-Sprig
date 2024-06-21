@@ -12,8 +12,9 @@ https://sprig.hackclub.com/gallery/getting_started
 const background = "b";
 const character_arrow_right = ">"
 const character_arrow_left = "<"
-const colorPaletteMainMenu = ['C', '3', 'C', 'C', '1', '1', 'C', 'C', '2', 'C', '1', '1', '1', '1', 'C', '4'];
-const spyWords = ['MrBeast','McDonalds']
+const colorPaletteMainMenu = ['C', '3', 'C', 'C', '1', '1', 'C', '2', '2', '3', '1', '1', '1', '1', 'C', '4'];
+const colorPaletteSpy = ['C', '3', 'C', 'C', '1', '1', 'C', '2', '3', 'C', '1', '1', '1', '1', 'C', '4'];
+const spyWords = ['       MrBeast','      McDonalds']
 
 setLegend(
   [ background, bitmap`
@@ -73,6 +74,7 @@ setSolids([])
 
 let level = 0
 let currentGameMode = 0
+let gameSetting = 0
 const levels = [
   map`
 bbbbbbbbbbbbbbbbbbbb
@@ -261,20 +263,74 @@ bbbbbbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbbbbbb`,
+  map`
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb`,
+  map`
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb`,
+  map`
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb`,
 ]
 
 const levelTexts = [
-  ["", "     Party Games", "", "", "   Choose the game", "", "", "", "         Spy", "", "Everyone gets a word", "  except the spies", "who try to guess the", "         word.", "", "     Confirm(W)"],
-  ["", "     Party Games", "", "", "   Choose the game", "", "", "", "     Party Bomb", "", "Everyone has a theme", " ,say words related", " to the theme until ", " the bomb explodes.", "", "     Confirm(W)"],
-  ["", "     Party Games", "", "", "   Choose the game", "", "", "", "      Paranoia", "", "    Ask questions", "   secretly, name", " someone, coin flip", "decides if you hear.", "", "     Confirm(W)"],
-  ["", "         Spy", "", "", "Choose the number of", "       players", "", "", "          2", "", "", "", "", "", "", "     Confirm(I)"],
-  ["", "         Spy", "", "", "Choose the number of", "       players", "", "", "          3", "", "", "", "", "", "", "     Confirm(I)"],
-  ["", "         Spy", "", "", "Choose the number of", "       players", "", "", "          4", "", "", "", "", "", "", "     Confirm(I)"],
-  ["", "         Spy", "", "", "Choose the number of", "       players", "", "", "          5", "", "", "", "", "", "", "     Confirm(I)"],
-  ["", "         Spy", "", "", "Choose the number of", "       players", "", "", "          6", "", "", "", "", "", "", "     Confirm(I)"],
-  ["", "         Spy", "", "", "Choose the number of", "       players", "", "", "          7", "", "", "", "", "", "", "     Confirm(I)"],
-  ["", "         Spy", "", "", "Choose the number of", "       players", "", "", "          8", "", "", "", "", "", "", "     Confirm(I)"],
-  ["", "         Spy", "", "", "Choose the number of", "       players", "", "", "          9", "", "", "", "", "", "", "     Confirm(I)"],
+  ["", "     Party Games", "", "", "   Choose the game", "", "", "", "         Spy", "", "Everyone gets a word", "  except the spies", "who try to guess the", "         word.", "", "      Confirm(W)"],
+  ["", "     Party Games", "", "", "   Choose the game", "", "", "", "     Party Bomb", "", "Everyone has a theme", " ,say words related", " to the theme until ", " the bomb explodes.", "", "      Confirm(W)"],
+  ["", "     Party Games", "", "", "   Choose the game", "", "", "", "      Paranoia", "", "    Ask questions", "   secretly, name", " someone, coin flip", "decides if you hear.", "", "      Confirm(W)"],
+  ["", "         Spy", "", "", "   Choose the game", "        format", "", "", "      2 players", "        1 spy", "", "", "", "", "", "      Confirm(I)"],
+  ["", "         Spy", "", "", "   Choose the game", "        format", "", "", "      3 players", "        1 spy", "", "", "", "", "", "      Confirm(I)"],
+  ["", "         Spy", "", "", "   Choose the game", "        format", "", "", "      4 players", "        1 spy", "", "", "", "", "", "      Confirm(I)"],
+  ["", "         Spy", "", "", "   Choose the game", "        format", "", "", "      5 players", "        1 spy", "", "", "", "", "", "      Confirm(I)"],
+  ["", "         Spy", "", "", "   Choose the game", "        format", "", "", "      5 players", "        2 spy", "", "", "", "", "", "      Confirm(I)"],
+  ["", "         Spy", "", "", "   Choose the game", "        format", "", "", "      6 players", "        2 spy", "", "", "", "", "", "      Confirm(I)"],
+  ["", "         Spy", "", "", "   Choose the game", "        format", "", "", "      7 players", "        2 spy", "", "", "", "", "", "      Confirm(I)"],
+  ["", "         Spy", "", "", "   Choose the game", "        format", "", "", "      8 players", "        2 spy", "", "", "", "", "", "      Confirm(I)"],
+  ["", "         Spy", "", "", "", "", "", "     You are the", "         Spy","", "", "", "", "", "", "      Confirm(K)"],
+  ["", "         Spy", "", "", "", "", "", "     The word is", "","", "", "", "", "", "", "      Confirm(K)"],
+  ["", "         Spy", "", "", "", "", "", " Pass to next person", "","", "", "", "", "", "", "      Confirm(K)"],
 ];
 
 function addLevelTexts(colorPalette) {
@@ -292,6 +348,79 @@ function clearAllText() {
     clearText(i);
   }
 }
+
+function startSpyGameManager() {
+  startSpyGame(gameSetting);
+}
+
+function startSpyGame(gameSetting) {
+  clearAllText();
+
+  const randomIndex = Math.floor(Math.random() * spyWords.length);
+  const selectedWord = spyWords[randomIndex];
+
+  const wordList = Array(gameSetting).fill(selectedWord);
+
+  if (gameSetting <= 6) {
+    const spyIndex = Math.floor(Math.random() * gameSetting);
+    wordList[spyIndex] = 'SPY';
+  } else if (gameSetting >= 7 && gameSetting <= 10) {
+    const spyIndices = new Set();
+    while (spyIndices.size < 2) {
+      spyIndices.add(Math.floor(Math.random() * gameSetting));
+    }
+    spyIndices.forEach(index => {
+      wordList[index] = 'SPY';
+    });
+  }
+
+  // Alternate addition of "WAIT" after each original word
+  const newList = [];
+  wordList.forEach((word, index) => {
+    newList.push(word);
+    if (index < wordList.length - 1) {
+      newList.push("WAIT");
+    }
+  });
+
+  let currentIndex = 0;
+
+  function displayWord(index) {
+    clearAllText();
+    if (newList[index] === 'SPY') {
+      level = 11;
+      setMap(levels[level]);
+      addLevelTexts(colorPaletteSpy);
+    } else if (newList[index] === 'WAIT') {
+      level = 13;
+      setMap(levels[level]);
+      addLevelTexts(colorPaletteMainMenu);
+    } else {
+      level = 12;
+      setMap(levels[level]);
+      addLevelTexts(colorPaletteMainMenu);
+      addText(newList[index], {
+        x: 0,
+        y: 8,
+        color: color`${colorPaletteMainMenu[8]}`
+      });
+    }
+  }
+
+  displayWord(currentIndex);
+
+  onInput("k", () => {
+    currentIndex++;
+    if (currentIndex < newList.length) {
+      displayWord(currentIndex);
+    } else {
+      clearAllText();
+      // Optionally, add code here to handle the end of the word list
+    }
+  });
+}
+
+
 addLevelTexts(colorPaletteMainMenu);
 
 setMap(levels[level])
@@ -334,6 +463,13 @@ onInput("w", () => {
     clearAllText();
     setMap(levels[level]);
     addLevelTexts(colorPaletteMainMenu);
+  }
+});
+
+onInput("i", () => {
+  if (currentGameMode === 0 && level >= 3 && level <= 10) {
+    gameSetting = level;
+    startSpyGameManager();
   }
 });
 
