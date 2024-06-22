@@ -85,7 +85,7 @@ bbbbbbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbb>b
+bbbbbbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbbbbbb
@@ -349,6 +349,24 @@ function clearAllText() {
   }
 }
 
+function updateClock(timeLeft, callback) {
+  clearAllText();
+  
+  addText(`   Time Left: ${timeLeft}`, { x: 0, y: 8, color: color`4` });
+
+  if (timeLeft > 0) {
+    setTimeout(function() {
+      updateClock(timeLeft - 1, callback);
+    }, 1000);
+  } else {
+    clearAllText();
+    addText("     Time's up!", { x: 0, y: 8, color: color`3` });
+    setTimeout(function() {
+        startSpyGameManager();
+    }, 10000);
+  }
+}
+
 function startSpyGameManager() {
   startSpyGame(gameSetting);
 }
@@ -374,8 +392,7 @@ function startSpyGame(gameSetting) {
     });
   }
 
-  // Alternate addition of "WAIT" after each original word
-  const newList = [];
+  const newList = ['WAIT'];
   wordList.forEach((word, index) => {
     newList.push(word);
     if (index < wordList.length - 1) {
@@ -384,6 +401,7 @@ function startSpyGame(gameSetting) {
   });
 
   let currentIndex = 0;
+  let functionEnded = false;
 
   function displayWord(index) {
     clearAllText();
@@ -408,17 +426,23 @@ function startSpyGame(gameSetting) {
   }
 
   displayWord(currentIndex);
-
+  
   onInput("k", () => {
+    if (functionEnded) return;
+
     currentIndex++;
     if (currentIndex < newList.length) {
       displayWord(currentIndex);
     } else {
       clearAllText();
-      // Optionally, add code here to handle the end of the word list
+      updateClock(120, () => {
+        console.log("Transitioning to the next phase of the game.");
+      });
+      functionEnded = true;
     }
   });
 }
+
 
 
 addLevelTexts(colorPaletteMainMenu);
@@ -426,7 +450,7 @@ addLevelTexts(colorPaletteMainMenu);
 setMap(levels[level])
 
 onInput("d", () => {
-  if (level >= 0 && level < 2) {
+  if (level >= 0 && level < 0) {
     level = Math.min(level + 1, 2);
     clearAllText();
     setMap(levels[level]);
@@ -442,7 +466,7 @@ onInput("d", () => {
 });
 
 onInput("a", () => {
-  if (level > 0 && level <= 2) {
+  if (level > 0 && level <= 0) {
     level = Math.max(level - 1, 0);
     clearAllText();
     setMap(levels[level]);
@@ -469,6 +493,7 @@ onInput("w", () => {
 onInput("i", () => {
   if (currentGameMode === 0 && level >= 3 && level <= 10) {
     gameSetting = level;
+    currentGameMode = 4
     startSpyGameManager();
   }
 });
